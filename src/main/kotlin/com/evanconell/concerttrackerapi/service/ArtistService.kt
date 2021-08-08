@@ -1,6 +1,6 @@
 package com.evanconell.concerttrackerapi.service
 
-import com.evanconell.concerttrackerapi.model.Artist
+import com.evanconell.concerttrackerapi.model.data.Artist
 import com.evanconell.concerttrackerapi.respository.ArtistRepository
 import org.springframework.stereotype.Service
 

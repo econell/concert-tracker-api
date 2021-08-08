@@ -1,4 +1,4 @@
-package com.evanconell.concerttrackerapi.model
+package com.evanconell.concerttrackerapi.model.data
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.TypeAlias

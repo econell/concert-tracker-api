@@ -1,6 +1,6 @@
 package com.evanconell.concerttrackerapi.controller
 
-import com.evanconell.concerttrackerapi.model.Artist
+import com.evanconell.concerttrackerapi.model.data.Artist
 import com.evanconell.concerttrackerapi.model.exception.NotFoundException
 import com.evanconell.concerttrackerapi.service.ArtistService
 import com.evanconell.concerttrackerapi.service.NotFound
