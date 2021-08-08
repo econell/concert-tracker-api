@@ -1,19 +1,16 @@
 package com.evanconell.concerttrackerapi.service
 
 import com.evanconell.concerttrackerapi.ConcertTrackerTestBase
+import com.evanconell.concerttrackerapi.model.data.Artist
 import com.evanconell.concerttrackerapi.respository.ArtistRepository
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import strikt.api.expect
 import strikt.api.expectThat
-import strikt.assertions.containsExactly
-import strikt.assertions.isA
-import strikt.assertions.isEqualTo
+import strikt.assertions.*
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -82,5 +79,30 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
             .isA<GetArtistByIdResult.NotFound>()
             .get(GetArtistByIdResult.NotFound::message)
             .isEqualTo("Artist not found with id $id")
+    }
+
+    @Test
+    fun createArtist_returnsArtist_whenGivenValidCommand() {
+        // Arrange
+        val createArtistCommand = faker.ctCreateArtistCommand()
+        val capturedArtist = slot<Artist>()
+        val expected = faker.ctArtist()
+        every { repoMock.save(capture(capturedArtist)) } returns expected
+
+        // Act
+        val actual = service.createArtist(createArtistCommand)
+
+        // Assert
+        expectThat(actual)
+            .isA<CreateArtistResult.Success>()
+            .get(CreateArtistResult.Success::artist)
+            .isEqualTo(expected)
+
+        expectThat(capturedArtist.isCaptured).isTrue()
+
+        expectThat(capturedArtist.captured) {
+            get { id }.isNotEmpty()
+            get { name }.isEqualTo(createArtistCommand.name)
+        }
     }
 }

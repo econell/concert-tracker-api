@@ -1,5 +1,6 @@
 package com.evanconell.concerttrackerapi
 
+import com.evanconell.concerttrackerapi.model.command.CreateArtistCommand
 import com.evanconell.concerttrackerapi.model.data.Artist
 import com.github.javafaker.Faker
 import org.bson.types.ObjectId
@@ -16,4 +17,6 @@ object ConcertTrackerFaker : Faker() {
         id = id(),
         name = artist().name()
     )
+
+    fun ctCreateArtistCommand(): CreateArtistCommand = CreateArtistCommand(name = artist().name())
 }
