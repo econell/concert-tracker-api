@@ -9,9 +9,11 @@ interface ArtistService {
     fun getArtistById(id: String) : GetArtistByIdResult
 }
 
-sealed class GetArtistByIdResult
-class Success(val artist: Artist) : GetArtistByIdResult()
-class NotFound(val message: String) : GetArtistByIdResult()
+sealed class GetArtistByIdResult {
+    class Success(val artist: Artist) : GetArtistByIdResult()
+    class NotFound(val message: String) : GetArtistByIdResult()
+}
+
 
 @Service("artistService")
 class ArtistServiceImpl(
@@ -23,7 +25,7 @@ class ArtistServiceImpl(
         return artistRepo
                 .findById(id)
                 .takeIf { it.isPresent }
-                ?.let { Success(it.get()) }
-                ?: NotFound("Artist not found with id $id")
+                ?.let { GetArtistByIdResult.Success(it.get()) }
+                ?: GetArtistByIdResult.NotFound("Artist not found with id $id")
     }
 }

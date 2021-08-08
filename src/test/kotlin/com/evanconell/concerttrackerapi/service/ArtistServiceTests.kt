@@ -59,8 +59,8 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
         // Assert
         verify { repoMock.findById(id) }
         expectThat(actual)
-                .isA<Success>()
-                .get(Success::artist)
+                .isA<GetArtistByIdResult.Success>()
+                .get(GetArtistByIdResult.Success::artist)
                 .isEqualTo(expected)
     }
 
@@ -76,8 +76,8 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
         // Assert
         verify { repoMock.findById(id) }
         expectThat(actual)
-                .isA<NotFound>()
-                .get(NotFound::message)
+                .isA<GetArtistByIdResult.NotFound>()
+                .get(GetArtistByIdResult.NotFound::message)
                 .isEqualTo("Artist not found with id $id")
     }
 }
