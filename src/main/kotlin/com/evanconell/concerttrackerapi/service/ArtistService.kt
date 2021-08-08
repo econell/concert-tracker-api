@@ -6,13 +6,12 @@ import org.springframework.stereotype.Service
 
 interface ArtistService {
     fun getAllArtists() : List<Artist>
-    fun getArtistById(id: String) : ArtistServiceResult
-
+    fun getArtistById(id: String) : GetArtistByIdResult
 }
 
-sealed class ArtistServiceResult
-class Success(val artist: Artist) : ArtistServiceResult()
-class NotFound(val message: String) : ArtistServiceResult()
+sealed class GetArtistByIdResult
+class Success(val artist: Artist) : GetArtistByIdResult()
+class NotFound(val message: String) : GetArtistByIdResult()
 
 @Service("artistService")
 class ArtistServiceImpl(
@@ -20,7 +19,7 @@ class ArtistServiceImpl(
 ): ArtistService {
     override fun getAllArtists(): List<Artist> = artistRepo.findAll().toList()
 
-    override fun getArtistById(id: String) : ArtistServiceResult {
+    override fun getArtistById(id: String) : GetArtistByIdResult {
         return artistRepo
                 .findById(id)
                 .takeIf { it.isPresent }
