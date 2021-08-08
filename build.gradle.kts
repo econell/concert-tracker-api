@@ -23,6 +23,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.strikt:strikt-core:0.31.0")
+    testImplementation("com.github.javafaker:javafaker:1.0.2")
 }
 
 tasks.withType<KotlinCompile> {
