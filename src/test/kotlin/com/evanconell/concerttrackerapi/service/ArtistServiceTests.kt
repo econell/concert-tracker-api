@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
+import strikt.assertions.isA
+import strikt.assertions.isEqualTo
+import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArtistServiceTests: ConcertTrackerTestBase() {
@@ -40,5 +43,41 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
         verify { repoMock.findAll() }
         expectThat(actual)
                 .containsExactly(expected)
+    }
+
+
+    @Test
+    fun getArtistById_returnsSuccess_whenExists() {
+        // Arrange
+        val id = faker.id()
+        val expected = faker.ctArtist()
+        every { repoMock.findById(id) } returns Optional.of(expected)
+
+        // Act
+        val actual = service.getArtistById(id)
+
+        // Assert
+        verify { repoMock.findById(id) }
+        expectThat(actual)
+                .isA<Success>()
+                .get(Success::artist)
+                .isEqualTo(expected)
+    }
+
+    @Test
+    fun getArtistById_returnsNotFound_whenDoesNotExist() {
+        // Arrange
+        val id = faker.id()
+        every { repoMock.findById(id) } returns Optional.empty()
+
+        // Act
+        val actual = service.getArtistById(id)
+
+        // Assert
+        verify { repoMock.findById(id) }
+        expectThat(actual)
+                .isA<NotFound>()
+                .get(NotFound::message)
+                .isEqualTo("Artist not found with id $id")
     }
 }
