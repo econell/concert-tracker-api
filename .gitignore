@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### MongoDb Local Development, note: the dir needs to be present but don't want to commit the actual data ###
+mongodb-data/*
+
+### Local .env File ###
+.env
