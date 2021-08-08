@@ -1,12 +1,14 @@
 package com.evanconell.concerttrackerapi.model.validation
 
-sealed class ValidationResult {
-    object Success : ValidationResult()
-    data class Failure(val errors: List<ValidationError>) : ValidationResult()
+import kotlinx.serialization.Serializable
+
+data class ValidationResult(val errors: List<ValidationError>) {
+    fun isValid(): Boolean = errors.isEmpty()
 }
 
+@Serializable
 data class ValidationError(
     val field: String,
-    val value: Any,
+    val value: String,
     val message: String
 )
