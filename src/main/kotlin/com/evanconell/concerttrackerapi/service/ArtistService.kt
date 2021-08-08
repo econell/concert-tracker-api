@@ -5,8 +5,8 @@ import com.evanconell.concerttrackerapi.respository.ArtistRepository
 import org.springframework.stereotype.Service
 
 interface ArtistService {
-    fun getAllArtists() : List<Artist>
-    fun getArtistById(id: String) : GetArtistByIdResult
+    fun getAllArtists(): List<Artist>
+    fun getArtistById(id: String): GetArtistByIdResult
 }
 
 sealed class GetArtistByIdResult {
@@ -17,15 +17,15 @@ sealed class GetArtistByIdResult {
 
 @Service("artistService")
 class ArtistServiceImpl(
-        private val artistRepo: ArtistRepository
-): ArtistService {
+    private val artistRepo: ArtistRepository
+) : ArtistService {
     override fun getAllArtists(): List<Artist> = artistRepo.findAll().toList()
 
-    override fun getArtistById(id: String) : GetArtistByIdResult {
+    override fun getArtistById(id: String): GetArtistByIdResult {
         return artistRepo
-                .findById(id)
-                .takeIf { it.isPresent }
-                ?.let { GetArtistByIdResult.Success(it.get()) }
-                ?: GetArtistByIdResult.NotFound("Artist not found with id $id")
+            .findById(id)
+            .takeIf { it.isPresent }
+            ?.let { GetArtistByIdResult.Success(it.get()) }
+            ?: GetArtistByIdResult.NotFound("Artist not found with id $id")
     }
 }

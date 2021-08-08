@@ -17,7 +17,7 @@ class ArtistController(private val artistService: ArtistService) {
     @GetMapping("/artist/{id}")
     fun getArtistById(@PathVariable id: String): Artist {
         return artistService.getArtistById(id).let {
-            when(it) {
+            when (it) {
                 is GetArtistByIdResult.Success -> it.artist
                 is GetArtistByIdResult.NotFound -> throw NotFoundException(it.message)
             }

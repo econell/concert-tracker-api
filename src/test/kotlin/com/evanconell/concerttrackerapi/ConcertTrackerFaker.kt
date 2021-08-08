@@ -13,7 +13,7 @@ object ConcertTrackerFaker : Faker() {
     fun id(): String = ObjectId.get().toHexString()
 
     fun ctArtist(): Artist = Artist(
-            id = id(),
-            name = artist().name()
+        id = id(),
+        name = artist().name()
     )
 }

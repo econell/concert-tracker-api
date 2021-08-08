@@ -10,5 +10,5 @@ class ConcertTrackerApiApplicationTests {
     fun contextLoads() {
     }
 
-    
+
 }

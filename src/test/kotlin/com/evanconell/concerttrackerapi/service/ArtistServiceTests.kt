@@ -2,7 +2,10 @@ package com.evanconell.concerttrackerapi.service
 
 import com.evanconell.concerttrackerapi.ConcertTrackerTestBase
 import com.evanconell.concerttrackerapi.respository.ArtistRepository
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,7 +17,7 @@ import strikt.assertions.isEqualTo
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ArtistServiceTests: ConcertTrackerTestBase() {
+class ArtistServiceTests : ConcertTrackerTestBase() {
     private lateinit var repoMock: ArtistRepository
     private lateinit var service: ArtistService
 
@@ -31,8 +34,8 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
     fun getAllArtists_returnsList() {
         // Arrange
         val expected = listOf(
-                faker.ctArtist(),
-                faker.ctArtist()
+            faker.ctArtist(),
+            faker.ctArtist()
         )
         every { repoMock.findAll() } returns expected
 
@@ -42,7 +45,7 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
         // Assert
         verify { repoMock.findAll() }
         expectThat(actual)
-                .containsExactly(expected)
+            .containsExactly(expected)
     }
 
 
@@ -59,9 +62,9 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
         // Assert
         verify { repoMock.findById(id) }
         expectThat(actual)
-                .isA<GetArtistByIdResult.Success>()
-                .get(GetArtistByIdResult.Success::artist)
-                .isEqualTo(expected)
+            .isA<GetArtistByIdResult.Success>()
+            .get(GetArtistByIdResult.Success::artist)
+            .isEqualTo(expected)
     }
 
     @Test
@@ -76,8 +79,8 @@ class ArtistServiceTests: ConcertTrackerTestBase() {
         // Assert
         verify { repoMock.findById(id) }
         expectThat(actual)
-                .isA<GetArtistByIdResult.NotFound>()
-                .get(GetArtistByIdResult.NotFound::message)
-                .isEqualTo("Artist not found with id $id")
+            .isA<GetArtistByIdResult.NotFound>()
+            .get(GetArtistByIdResult.NotFound::message)
+            .isEqualTo("Artist not found with id $id")
     }
 }
