@@ -135,4 +135,40 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
             .get(CreateArtistResult.ValidationFailure::errors)
             .containsExactly(expectedValidationError)
     }
+
+    @Test
+    fun deleteArtistById_returnsSuccess_whenExists() {
+        // Arrange
+        val id = faker.id()
+        val expected = faker.ctArtist()
+        every { repoMock.findById(id) } returns Optional.of(expected)
+        every { repoMock.deleteById(id) } returns Unit
+
+        // Act
+        val actual = service.deleteArtistById(id)
+
+        // Assert
+        verify { repoMock.findById(id) }
+        verify { repoMock.deleteById(id) }
+        expectThat(actual)
+            .isA<DeleteArtistResult.Success>()
+    }
+
+    @Test
+    fun deleteArtistById_returnsNotFound_whenDoesNotExist() {
+        // Arrange
+        val id = faker.id()
+        every { repoMock.findById(id) } returns Optional.empty()
+
+        // Act
+        val actual = service.deleteArtistById(id)
+
+        // Assert
+        verify { repoMock.findById(id) }
+        verify(exactly = 0) { repoMock.deleteById(any()) }
+        expectThat(actual)
+            .isA<DeleteArtistResult.NotFound>()
+            .get(DeleteArtistResult.NotFound::message)
+            .isEqualTo("Artist not found with id $id")
+    }
 }

@@ -6,8 +6,12 @@ import com.evanconell.concerttrackerapi.model.exception.NotFoundException
 import com.evanconell.concerttrackerapi.model.exception.ValidationException
 import com.evanconell.concerttrackerapi.service.ArtistService
 import com.evanconell.concerttrackerapi.service.CreateArtistResult
+import com.evanconell.concerttrackerapi.service.DeleteArtistResult
 import com.evanconell.concerttrackerapi.service.GetArtistByIdResult
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+
 
 @RestController
 class ArtistController(private val artistService: ArtistService) {
@@ -33,6 +37,17 @@ class ArtistController(private val artistService: ArtistService) {
             when (it) {
                 is CreateArtistResult.Success -> it.artist
                 is CreateArtistResult.ValidationFailure -> throw ValidationException(it.errors)
+            }
+        }
+    }
+
+
+    @DeleteMapping("/artist/{id}")
+    fun deleteArtistById(@PathVariable id: String): ResponseEntity<Void> {
+        return artistService.deleteArtistById(id).let {
+            when (it) {
+                is DeleteArtistResult.Success -> ResponseEntity<Void>(HttpStatus.NO_CONTENT)
+                is DeleteArtistResult.NotFound -> throw NotFoundException(it.message)
             }
         }
     }

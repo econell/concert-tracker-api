@@ -11,6 +11,7 @@ interface ArtistService {
     fun getAllArtists(): List<Artist>
     fun getArtistById(id: String): GetArtistByIdResult
     fun createArtist(createCommand: CreateArtistCommand): CreateArtistResult
+    fun deleteArtistById(id: String): DeleteArtistResult
 }
 
 sealed class GetArtistByIdResult {
@@ -21,6 +22,11 @@ sealed class GetArtistByIdResult {
 sealed class CreateArtistResult {
     data class Success(val artist: Artist) : CreateArtistResult()
     data class ValidationFailure(val errors: List<ValidationError>) : CreateArtistResult()
+}
+
+sealed class DeleteArtistResult {
+    object Success : DeleteArtistResult()
+    data class NotFound(val message: String) : DeleteArtistResult()
 }
 
 
@@ -49,5 +55,18 @@ class ArtistServiceImpl(
                     name = createCommand.name
                 )
             ).let { CreateArtistResult.Success(it) }
+    }
+
+    override fun deleteArtistById(id: String): DeleteArtistResult {
+        return getArtistById(id)
+            .let {
+                when (it) {
+                    is GetArtistByIdResult.Success -> {
+                        artistRepo.deleteById(id)
+                        DeleteArtistResult.Success
+                    }
+                    is GetArtistByIdResult.NotFound -> DeleteArtistResult.NotFound(it.message)
+                }
+            }
     }
 }
