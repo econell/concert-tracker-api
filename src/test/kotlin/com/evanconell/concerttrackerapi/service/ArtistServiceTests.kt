@@ -82,9 +82,12 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
     }
 
     @Test
-    fun createArtist_returnsArtist_whenGivenValidCommand() {
+    fun createArtist_returnsSuccess_whenGivenValidCommand() {
         // Arrange
-        val createArtistCommand = faker.ctCreateArtistCommand()
+        val createArtistCommand = mockk<CreateArtistCommand>()
+        val expectedArtistName = faker.artist().name()
+        every { createArtistCommand.validate() } returns ValidationResult(emptyList())
+        every { createArtistCommand.name } returns expectedArtistName
         val capturedArtist = slot<Artist>()
         val expected = faker.ctArtist()
         every { repoMock.save(capture(capturedArtist)) } returns expected
@@ -93,6 +96,7 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
         val actual = service.createArtist(createArtistCommand)
 
         // Assert
+        verify { createArtistCommand.validate() }
         expectThat(actual)
             .isA<CreateArtistResult.Success>()
             .get(CreateArtistResult.Success::artist)
@@ -102,7 +106,7 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
 
         expectThat(capturedArtist.captured) {
             get { id }.isNotEmpty()
-            get { name }.isEqualTo(createArtistCommand.name)
+            get { name }.isEqualTo(expectedArtistName)
         }
     }
 }
