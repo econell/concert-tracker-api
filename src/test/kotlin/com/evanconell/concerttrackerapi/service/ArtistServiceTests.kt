@@ -117,11 +117,7 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
     fun createArtist_returnsValidationFailure_whenGivenCommandIsInvalid() {
         // Arrange
         val createArtistCommand = mockk<CreateArtistCommand>()
-        val expectedValidationError = ValidationError(
-            field = faker.name().firstName(),
-            value = faker.name().lastName(),
-            message = faker.shakespeare().hamletQuote()
-        )
+        val expectedValidationError = faker.ctValidationError()
         every { createArtistCommand.validate() } returns ValidationResult(listOf(expectedValidationError))
 
         // Act
