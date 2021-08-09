@@ -39,6 +39,8 @@ It will initially take some time to compile and run, but you will see the follow
 
 Now that the service is running you can make requests against is using Postman and `http://localhost:8080/{controller}/{route}`.
 
+> **Note: See the following [Postman Collection](https://www.getpostman.com/collections/ffca384a573896d3a252) for example requests**
+
 ### Unit Tests
 
 Unit tests are written using JUnit 5 in conjunction with [MockK](https://mockk.io/), [Strikt](https://strikt.io/), and [Java Faker](https://github.com/DiUS/java-faker).
