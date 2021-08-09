@@ -1,7 +1,10 @@
 package com.evanconell.concerttrackerapi.service
 
 import com.evanconell.concerttrackerapi.ConcertTrackerTestBase
+import com.evanconell.concerttrackerapi.model.command.CreateArtistCommand
 import com.evanconell.concerttrackerapi.model.data.Artist
+import com.evanconell.concerttrackerapi.model.validation.ValidationError
+import com.evanconell.concerttrackerapi.model.validation.ValidationResult
 import com.evanconell.concerttrackerapi.respository.ArtistRepository
 import io.mockk.*
 import org.junit.jupiter.api.BeforeAll
@@ -108,5 +111,28 @@ class ArtistServiceTests : ConcertTrackerTestBase() {
             get { id }.isNotEmpty()
             get { name }.isEqualTo(expectedArtistName)
         }
+    }
+
+    @Test
+    fun createArtist_returnsValidationFailure_whenGivenCommandIsInvalid() {
+        // Arrange
+        val createArtistCommand = mockk<CreateArtistCommand>()
+        val expectedValidationError = ValidationError(
+            field = faker.name().firstName(),
+            value = faker.name().lastName(),
+            message = faker.shakespeare().hamletQuote()
+        )
+        every { createArtistCommand.validate() } returns ValidationResult(listOf(expectedValidationError))
+
+        // Act
+        val actual = service.createArtist(createArtistCommand)
+
+        // Assert
+        verify { createArtistCommand.validate() }
+        verify(exactly = 0) { repoMock.save(any()) }
+        expectThat(actual)
+            .isA<CreateArtistResult.ValidationFailure>()
+            .get(CreateArtistResult.ValidationFailure::errors)
+            .containsExactly(expectedValidationError)
     }
 }
