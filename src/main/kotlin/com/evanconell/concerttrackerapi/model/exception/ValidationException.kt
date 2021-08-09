@@ -7,4 +7,4 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 
 @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-class ValidationException(errors: List<ValidationError>) : RuntimeException(Json.encodeToString(errors))
+class ValidationException(val errors: List<ValidationError>) : RuntimeException(Json.encodeToString(errors))
