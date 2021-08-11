@@ -1,6 +1,6 @@
 # Concert Tracker API
 
-Kotlin REST API with MongoDB data stores for the Concert Tracker Web App (see [Concert Tracker UI]()).
+Kotlin REST API with MongoDB data stores for the Concert Tracker Web App (see [Concert Tracker UI](https://github.com/econell/concert-tracker-ui-react)).
 
 ## Running Locally
 The following is intended to be a step-by-step guide on how to develop and debug locally.
