@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @CrossOrigin(originPatterns = ["*"])
+@RequestMapping("/artist")
 class ArtistController(private val artistService: ArtistService) {
 
-    @GetMapping("/artist")
+    @GetMapping
     fun getAllArtists(): List<Artist> {
         return artistService.getAllArtists()
     }
 
-    @GetMapping("/artist/{id}")
+    @GetMapping("/{id}")
     fun getArtistById(@PathVariable id: String): Artist {
         return artistService.getArtistById(id).let {
             when (it) {
@@ -31,7 +32,7 @@ class ArtistController(private val artistService: ArtistService) {
         }
     }
 
-    @PostMapping("/artist")
+    @PostMapping
     fun createArtist(@RequestBody createCommand: CreateArtistCommand): Artist {
         return artistService.createArtist(createCommand).let {
             when (it) {
@@ -42,7 +43,7 @@ class ArtistController(private val artistService: ArtistService) {
     }
 
 
-    @DeleteMapping("/artist/{id}")
+    @DeleteMapping("/{id}")
     fun deleteArtistById(@PathVariable id: String): ResponseEntity<Void> {
         return artistService.deleteArtistById(id).let {
             when (it) {
