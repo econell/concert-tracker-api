@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@CrossOrigin(originPatterns = ["*"])
+//@CrossOrigin(originPatterns = ["*"])
 @RequestMapping("/artist")
 class ArtistController(private val artistService: ArtistService) {
 
